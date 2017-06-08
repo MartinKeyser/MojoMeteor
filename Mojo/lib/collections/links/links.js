@@ -299,6 +299,77 @@ Meteor.methods({
 			errorCode: '',
 			errorMessage: ''
 		}
+	},
+
+	createTeamBrandLink:function(_creatorId, _teamId, _brandId) {
+		var result = teamBrandLinkCollection.findOne({ teamId: _teamId, brandId: _brandId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+
+		var teamRecord = teamsCollection.findOne({ _id: _teamId, isDeleted: false });
+		if (teamRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No team matching the criteria was found'
+			};
+		}
+
+		var brandRecord = brandsCollection.findOne(
+			{ _id: _brandId, isDeleted: false });
+		if (brandRecord == null ) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brand matching the criteria was found'
+			};
+		}
+
+		var newRecord = {
+			teamId: _teamId,
+			brandId: _brandId,
+			createdDate: new Date().toISOString()
+		};
+		var id = teamBrandLinkCollection.insert(newRecord);
+		var _rowData = teamBrandLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', _creatorId, 'teamBrandLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteTeamBrandLink:function(_creatorId, _teamId, _brandgroupId) {
+		// var result = teamBrandLinkCollection.remove
+		var result = teamBrandLinkCollection.findOne({ teamId: _teamId, brandId: _brandgroupId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This team brand link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = teamBrandLinkCollection.remove({ teamId: _teamId, brandId: _brandgroupId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were successfully deleted'
+			};
+		}
+		Meteor.call('audit', _creatorId, 'teamBrandLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
 	}
 
 });
