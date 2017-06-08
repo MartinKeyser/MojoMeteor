@@ -1,0 +1,9 @@
+<template name="layout">
+  <div id="templateWrapper" class="container">
+      {{#if currentUser}}
+        {{>yield}}
+      {{else}}
+        {{>loginTemplate}}
+      {{/if}}
+  </div>
+</template>

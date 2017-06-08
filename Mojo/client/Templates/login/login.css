@@ -1,0 +1,28 @@
+#loginForm{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+#registerForm{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+#btnLoginSubmit {
+	text-align: center;
+	width: 100%;
+}
+
+.test {
+	text-align: left;
+}
+
+.loginInputs {
+	text-align: left;
+}
+
+.btns{
+    text-align: center;
+}

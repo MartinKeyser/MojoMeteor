@@ -1,0 +1,31 @@
+#registerMain{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+.regInputs {
+	text-align: left;
+}
+
+.btns{
+    text-align: center;
+}
+
+input:not([type]) + label:after,
+input[type=text] + label:after,
+input[type=password] + label:after,
+input[type=email] + label:after,
+input[type=url] + label:after,
+input[type=time] + label:after,
+input[type=date] + label:after,
+input[type=datetime] + label:after,
+input[type=datetime-local] + label:after,
+input[type=tel] + label:after,
+input[type=number] + label:after,
+input[type=search] + label:after,
+textarea.materialize-textarea + label:after {
+    top: 38px !important;
+    right: 23px !important;
+    font-size: 12px !important;
+}

@@ -1,0 +1,34 @@
+<template name="loginTemplate">
+	<form id="loginForm">
+		<div class="row">
+			<div class="input-field col s6 offset-s3">
+				<input type="email" name="email" class="validate" id="loginEmail" />
+				<label for="loginEmail" class="loginInputs">Email</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-field col s6 offset-s3">
+				<input type="password" name="password" class="validate" id="loginPassword" />
+				<label for="loginPassword" class="loginInputs">Password</label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s6 offset-s3">
+				<input id="btnLoginSubmit" class="btn waves-effect waves-light" type="submit" value=" login " />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s6 offset-s3">
+				<button id="navigateToRegister" class="btn-flat waves-effect waves-light">Create an account</button>
+			</div>
+		</div>
+
+	</form>
+
+	<div id="registerBlade" style="display: none">
+			{{> registerTemplate}}
+	</div>
+</template>

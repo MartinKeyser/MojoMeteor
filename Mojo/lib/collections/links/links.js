@@ -1,0 +1,143 @@
+userTeamLinkCollection = new Mongo.Collection('userTeamLinks');
+userBrandLinkCollection = new Mongo.Collection('userBrandLinks');
+userBrandGroupLinkCollection = new Mongo.Collection('userBrandGroupLinks');
+
+brandBrandGroupLinkCollection = new Mongo.Collection('brandBrandGroupLinks');
+teamBrandLinkCollection = new Mongo.Collection('teamBrandLinks');
+teamBrandGroupLinkCollection = new Mongo.Collection('teamBrandGroupLinks');
+
+
+Meteor.methods({
+	createUserTeamLink:function(_userId, _teamId) {
+		var result = userTeamLinkCollection.findOne({ userId: _userId, teamId: _teamId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+		var newRecord = {
+			userId: _userId,
+			teamId: _teamId,
+			createdDate: new Date().toISOString()
+		};
+		var id = userTeamLinkCollection.insert(newRecord);
+		var _rowData = userTeamLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', 'userTeamLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteUserTeamLink:function(_userId, _teamId) {
+		// var result = userTeamLinkCollection.remove
+		var result = userTeamLinkCollection.findOne({ userId: _userId, teamId: _teamId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This user team link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = userTeamLinkCollection.remove({ userId: _userId, teamId: _teamId });
+		Meteor.call('audit', 'userTeamLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	createUserBrandLink:function(_userId, _brandId) {
+		var result = userBrandLinkCollection.findOne({ userId: _userId, brandId: _brandId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+		var newRecord = {
+			userId: _userId,
+			brandId: _brandId,
+			createdDate: new Date().toISOString()
+		};
+		var id = userBrandLinkCollection.insert(newRecord);
+		var _rowData = userBrandLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', 'userBrandLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteUserBrandLink:function(_userId, _brandId) {
+		// var result = userBrandLinkCollection.remove
+		var result = userBrandLinkCollection.findOne({ userId: _userId, brandId: _brandId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This user brand link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = userBrandLinkCollection.remove({ userId: _userId, brandId: _brandId });
+		Meteor.call('audit', 'userBrandLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	createUserBrandGroupLink:function(_userId, _brandgroupId) {
+		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+		var newRecord = {
+			userId: _userId,
+			brandgroupId: _brandgroupId,
+			createdDate: new Date().toISOString()
+		};
+		var id = userBrandGroupLinkCollection.insert(newRecord);
+		var _rowData = userBrandGroupLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', 'userBrandGroupLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteUserBrandGroupLink:function(_userId, _brandgroupId) {
+		// var result = userBrandGroupLinkCollection.remove
+		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This user brandgroup link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = userBrandGroupLinkCollection.remove({ userId: _userId, brandgroupId: _brandgroupId });
+		Meteor.call('audit', 'userBrandGroupLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	}
+
+});
