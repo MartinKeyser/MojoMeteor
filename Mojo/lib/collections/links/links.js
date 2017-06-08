@@ -6,9 +6,11 @@ brandBrandGroupLinkCollection = new Mongo.Collection('brandBrandGroupLinks');
 teamBrandLinkCollection = new Mongo.Collection('teamBrandLinks');
 teamBrandGroupLinkCollection = new Mongo.Collection('teamBrandGroupLinks');
 
+usersCollection = new Mongo.Collection.get('users');
+// teamsCollection = new Mongo.Collection('teams');
 
 Meteor.methods({
-	createUserTeamLink:function(_userId, _teamId) {
+	createUserTeamLink:function(_creatorId, _userId, _teamId) {
 		var result = userTeamLinkCollection.findOne({ userId: _userId, teamId: _teamId });
 		if (result != null) {
 			return {
@@ -17,6 +19,16 @@ Meteor.methods({
 				errorMessage: 'This link already exists, cannot recreate it'
 			};
 		}
+
+		// var userRecord = usersCollection.findOne({ _id: _userId });
+		// if (userRecord == null) {
+		// 	return {
+		// 		success: false,
+		// 		errorCode: 404,
+		// 		errorMessage: 'Link creation FAILED, No user matching the criteria was found'
+		// 	};
+		// }
+
 		var newRecord = {
 			userId: _userId,
 			teamId: _teamId,
@@ -24,7 +36,7 @@ Meteor.methods({
 		};
 		var id = userTeamLinkCollection.insert(newRecord);
 		var _rowData = userTeamLinkCollection.findOne({ _id: id });
-		Meteor.call('audit', 'userTeamLinks', id, _rowData, 'CREATE');
+		Meteor.call('audit', _creatorId, 'userTeamLinks', id, _rowData, 'CREATE');
 		return {
 			success: true,
 			errorCode: '',
@@ -32,7 +44,7 @@ Meteor.methods({
 		}
 	},
 
-	deleteUserTeamLink:function(_userId, _teamId) {
+	deleteUserTeamLink:function(_creatorId, _userId, _teamId) {
 		// var result = userTeamLinkCollection.remove
 		var result = userTeamLinkCollection.findOne({ userId: _userId, teamId: _teamId });
 		if (result == null) {
@@ -44,7 +56,7 @@ Meteor.methods({
 		}
 		var id = result._id;
 		var result = userTeamLinkCollection.remove({ userId: _userId, teamId: _teamId });
-		Meteor.call('audit', 'userTeamLinks', id, null, 'DELETE');
+		Meteor.call('audit', _creatorId, 'userTeamLinks', id, null, 'DELETE');
 		return {
 			success: true,
 			errorCode: '',
@@ -52,7 +64,7 @@ Meteor.methods({
 		}
 	},
 
-	createUserBrandLink:function(_userId, _brandId) {
+	createUserBrandLink:function(_creatorId, _userId, _brandId) {
 		var result = userBrandLinkCollection.findOne({ userId: _userId, brandId: _brandId });
 		if (result != null) {
 			return {
@@ -68,7 +80,7 @@ Meteor.methods({
 		};
 		var id = userBrandLinkCollection.insert(newRecord);
 		var _rowData = userBrandLinkCollection.findOne({ _id: id });
-		Meteor.call('audit', 'userBrandLinks', id, _rowData, 'CREATE');
+		Meteor.call('audit', _creatorId, 'userBrandLinks', id, _rowData, 'CREATE');
 		return {
 			success: true,
 			errorCode: '',
@@ -76,7 +88,7 @@ Meteor.methods({
 		}
 	},
 
-	deleteUserBrandLink:function(_userId, _brandId) {
+	deleteUserBrandLink:function(_creatorId, _userId, _brandId) {
 		// var result = userBrandLinkCollection.remove
 		var result = userBrandLinkCollection.findOne({ userId: _userId, brandId: _brandId });
 		if (result == null) {
@@ -88,7 +100,7 @@ Meteor.methods({
 		}
 		var id = result._id;
 		var result = userBrandLinkCollection.remove({ userId: _userId, brandId: _brandId });
-		Meteor.call('audit', 'userBrandLinks', id, null, 'DELETE');
+		Meteor.call('audit', _creatorId, 'userBrandLinks', id, null, 'DELETE');
 		return {
 			success: true,
 			errorCode: '',
@@ -96,7 +108,7 @@ Meteor.methods({
 		}
 	},
 
-	createUserBrandGroupLink:function(_userId, _brandgroupId) {
+	createUserBrandGroupLink:function(_creatorId, _userId, _brandgroupId) {
 		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
 		if (result != null) {
 			return {
@@ -112,7 +124,7 @@ Meteor.methods({
 		};
 		var id = userBrandGroupLinkCollection.insert(newRecord);
 		var _rowData = userBrandGroupLinkCollection.findOne({ _id: id });
-		Meteor.call('audit', 'userBrandGroupLinks', id, _rowData, 'CREATE');
+		Meteor.call('audit', _creatorId, 'userBrandGroupLinks', id, _rowData, 'CREATE');
 		return {
 			success: true,
 			errorCode: '',
@@ -120,7 +132,7 @@ Meteor.methods({
 		}
 	},
 
-	deleteUserBrandGroupLink:function(_userId, _brandgroupId) {
+	deleteUserBrandGroupLink:function(_creatorId, _userId, _brandgroupId) {
 		// var result = userBrandGroupLinkCollection.remove
 		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
 		if (result == null) {
@@ -132,7 +144,7 @@ Meteor.methods({
 		}
 		var id = result._id;
 		var result = userBrandGroupLinkCollection.remove({ userId: _userId, brandgroupId: _brandgroupId });
-		Meteor.call('audit', 'userBrandGroupLinks', id, null, 'DELETE');
+		Meteor.call('audit', _creatorId, 'userBrandGroupLinks', id, null, 'DELETE');
 		return {
 			success: true,
 			errorCode: '',
