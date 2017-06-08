@@ -68,8 +68,17 @@ Meteor.methods({
 				errorMessage: 'This user team link has already been deleted'
 			};
 		}
+
 		var id = result._id;
 		var result = userTeamLinkCollection.remove({ userId: _userId, teamId: _teamId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were deleted from userTeamLinks'
+			};
+		}
+
 		Meteor.call('audit', _creatorId, 'userTeamLinks', id, null, 'DELETE');
 		return {
 			success: true,
@@ -131,8 +140,17 @@ Meteor.methods({
 				errorMessage: 'This user brand link has already been deleted'
 			};
 		}
+
 		var id = result._id;
 		var result = userBrandLinkCollection.remove({ userId: _userId, brandId: _brandId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were deleted from userBrandLinks'
+			};
+		}
+
 		Meteor.call('audit', _creatorId, 'userBrandLinks', id, null, 'DELETE');
 		return {
 			success: true,
@@ -148,6 +166,15 @@ Meteor.methods({
 				success: false,
 				errorCode: '205',
 				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+
+		var userRecord = Meteor.users.findOne({ _id: _userId, 'profile.isDeleted': false });
+		if (userRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No user matching the criteria was found'
 			};
 		}
 
@@ -172,7 +199,7 @@ Meteor.methods({
 
 		var newRecord = {
 			userId: _userId,
-			brandgroupId: _brandgroupId,
+			brandGroupId: _brandGroupId,
 			createdDate: new Date().toISOString()
 		};
 		var id = userBrandGroupLinkCollection.insert(newRecord);
@@ -187,7 +214,7 @@ Meteor.methods({
 
 	deleteUserBrandGroupLink:function(_creatorId, _userId, _brandgroupId) {
 		// var result = userBrandGroupLinkCollection.remove
-		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
+		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandGroupId: _brandgroupId });
 		if (result == null) {
 			return {
 		 		success: false,
@@ -196,7 +223,14 @@ Meteor.methods({
 			};
 		}
 		var id = result._id;
-		var result = userBrandGroupLinkCollection.remove({ userId: _userId, brandgroupId: _brandgroupId });
+		var result = userBrandGroupLinkCollection.remove({ userId: _userId, brandGroupId: _brandgroupId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were successfully deleted'
+			};
+		}
 		Meteor.call('audit', _creatorId, 'userBrandGroupLinks', id, null, 'DELETE');
 		return {
 			success: true,

@@ -267,7 +267,7 @@ Template.homeTemplate.events({
 	'click #testUserTeamLinkDelete'(event, instance) {
 		// console.log('user team create');
 		Meteor.subscribe('links');
-		Meteor.call('deleteUserTeamLink', Meteor.userId(), 'hmahJFXCTD7KXYWsa', 'D7gpGfTdMYMQF3Qhz', function(error, result) {
+		Meteor.call('deleteUserTeamLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'g5b3tinCqdFR6bx2L', function(error, result) {
 			if (error) {
 				console.log(error);
 			} else {
@@ -279,7 +279,7 @@ Template.homeTemplate.events({
 	'click #testUserBrandLinkCreate'(event, instance) {
 		// console.log('user brand create');
 		Meteor.subscribe('links');
-		Meteor.call('createUserBrandLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'Y44fqjZasrPSLEpBo', function(error, result) {
+		Meteor.call('createUserBrandLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'RZy5yZPhdq9WDq8YN', function(error, result) {
 			if (error) {
 				console.log(error);
 			} else {
@@ -291,7 +291,7 @@ Template.homeTemplate.events({
 	'click #testUserBrandLinkDelete'(event, instance) {
 		// console.log('user brand create');
 		Meteor.subscribe('links');
-		Meteor.call('deleteUserBrandLink', Meteor.userId(), 'hmahJFXCTD7KXYWsa', 'Y44fqjZasrPSLEpBo', function(error, result) {
+		Meteor.call('deleteUserBrandLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'RZy5yZPhdq9WDq8YN', function(error, result) {
 			if (error) {
 				console.log(error);
 			} else {
@@ -303,19 +303,24 @@ Template.homeTemplate.events({
 	'click #testUserBrandGroupLinkCreate'(event, instance) {
 		// console.log('user brandgroup create');
 		Meteor.subscribe('links');
-		Meteor.call('createUserBrandGroupLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'D7gpGfTdMYMQF3Qhz', function(error, result) {
-			if (error) {
-				console.log(error);
-			} else {
-				console.log(result);
-			}
-		});
+		Meteor.call(
+            'createUserBrandGroupLink',
+            Meteor.userId(),
+            'PjXh34xftbnDZNz5t',
+            '5stjL25qcmuRQ4WHc',
+            function(error, result) {
+    			if (error) {
+    				console.log(error);
+    			} else {
+    				console.log(result);
+    			}
+    		});
 	},
 
 	'click #testUserBrandGroupLinkDelete'(event, instance) {
 		// console.log('user brandgroup create');
 		Meteor.subscribe('links');
-		Meteor.call('deleteUserBrandGroupLink', Meteor.userId(), 'hmahJFXCTD7KXYWsa', 'D7gpGfTdMYMQF3Qhz', function(error, result) {
+		Meteor.call('deleteUserBrandGroupLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', '5stjL25qcmuRQ4WHc', function(error, result) {
 			if (error) {
 				console.log(error);
 			} else {
