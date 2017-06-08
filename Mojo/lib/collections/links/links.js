@@ -6,7 +6,7 @@ import { brandBrandGroupLinkCollection } from './linksCollection.js';
 import { teamBrandLinkCollection } from './linksCollection.js';
 import { teamBrandGroupLinkCollection } from './linksCollection.js';
 
-
+import { teamsCollection } from '../teams/teamsCollection.js';
 
 // usersCollection = new Mongo.Collection.get('users');
 // teamsCollection = new Mongo.Collection('teams');
@@ -22,14 +22,23 @@ Meteor.methods({
 			};
 		}
 
-		// var userRecord = usersCollection.findOne({ _id: _userId });
-		// if (userRecord == null) {
-		// 	return {
-		// 		success: false,
-		// 		errorCode: 404,
-		// 		errorMessage: 'Link creation FAILED, No user matching the criteria was found'
-		// 	};
-		// }
+		var userRecord = Meteor.users.findOne({ _id: _userId, 'profile.isDeleted': false });
+		if (userRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No user matching the criteria was found'
+			};
+		}
+
+		var teamRecord = teamsCollection.findOne({ _id: _teamId, isDeleted: false });
+		if (teamRecord == null ) {
+				return {
+					success: false,
+					errorCode: 404,
+					errorMessage: 'Link creation FAILED, No team matching the criteria was found'
+				};
+		}
 
 		var newRecord = {
 			userId: _userId,

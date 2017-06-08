@@ -25,7 +25,7 @@ Template.registerTemplate.events({
 			}
 			else {
 				var userObj = Meteor.user();
-				Meteor.call('audit', 'users', userObj._id, userObj, 'CREATE', function(error, result) {
+				Meteor.call('audit', Meteor.userId(), 'users', userObj._id, userObj, 'CREATE', function(error, result) {
 					if (error) {
 						alert('error');
 					}

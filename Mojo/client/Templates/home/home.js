@@ -255,7 +255,7 @@ Template.homeTemplate.events({
 	'click #testUserTeamLinkCreate'(event, instance) {
 		// console.log('user team create');
 		Meteor.subscribe('links');
-		Meteor.call('createUserTeamLink', Meteor.userId(), 'KpfPppmYadYjdwXa', 'tKu3qG2HjhMDTxMXq', function(error, result) {
+		Meteor.call('createUserTeamLink', Meteor.userId(), 'PjXh34xftbnDZNz5t', 'tKu3qG2HjhMDTxMXq', function(error, result) {
 			if (error) {
 				console.log(error);
 			} else {
