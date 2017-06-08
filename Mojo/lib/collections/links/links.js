@@ -370,6 +370,77 @@ Meteor.methods({
 			errorCode: '',
 			errorMessage: ''
 		}
+	},
+
+	createBrandBrandGroupLink:function(_creatorId, _brandId, _brandGroupId) {
+		var result = brandBrandGroupLinkCollection.findOne({ brandId: _brandId, brandGroupId: _brandGroupId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+
+		var brandRecord = brandsCollection.findOne({ _id: _brandId, isDeleted: false });
+		if (brandRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brand matching the criteria was found'
+			};
+		}
+
+		var brandGroupRecord = brandGroupsCollection.findOne(
+			{ _id: _brandGroupId, isDeleted: false });
+		if (brandGroupRecord == null ) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brandGroup matching the criteria was found'
+			};
+		}
+
+		var newRecord = {
+			brandId: _brandId,
+			brandGroupId: _brandGroupId,
+			createdDate: new Date().toISOString()
+		};
+		var id = brandBrandGroupLinkCollection.insert(newRecord);
+		var _rowData = brandBrandGroupLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', _creatorId, 'brandBrandGroupLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteBrandBrandGroupLink:function(_creatorId, _brandId, _brandgroupId) {
+		// var result = brandBrandGroupLinkCollection.remove
+		var result = brandBrandGroupLinkCollection.findOne({ brandId: _brandId, brandGroupId: _brandgroupId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This brand brandgroup link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = brandBrandGroupLinkCollection.remove({ brandId: _brandId, brandGroupId: _brandgroupId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were successfully deleted'
+			};
+		}
+		Meteor.call('audit', _creatorId, 'brandBrandGroupLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
 	}
 
 });
