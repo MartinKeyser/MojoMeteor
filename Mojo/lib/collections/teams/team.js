@@ -1,4 +1,6 @@
-teamsCollection = new Mongo.Collection('teams');
+// teamsCollection = new Mongo.Collection('teams');
+
+import { teamsCollection } from './teamsCollection.js';
 
 Meteor.methods({
 	createTeam:function(_userId, _teamName) {

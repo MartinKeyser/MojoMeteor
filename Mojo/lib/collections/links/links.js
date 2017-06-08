@@ -1,12 +1,14 @@
-userTeamLinkCollection = new Mongo.Collection('userTeamLinks');
-userBrandLinkCollection = new Mongo.Collection('userBrandLinks');
-userBrandGroupLinkCollection = new Mongo.Collection('userBrandGroupLinks');
+import { userTeamLinkCollection } from './linksCollection.js';
+import { userBrandLinkCollection } from './linksCollection.js';
+import { userBrandGroupLinkCollection } from './linksCollection.js';
 
-brandBrandGroupLinkCollection = new Mongo.Collection('brandBrandGroupLinks');
-teamBrandLinkCollection = new Mongo.Collection('teamBrandLinks');
-teamBrandGroupLinkCollection = new Mongo.Collection('teamBrandGroupLinks');
+import { brandBrandGroupLinkCollection } from './linksCollection.js';
+import { teamBrandLinkCollection } from './linksCollection.js';
+import { teamBrandGroupLinkCollection } from './linksCollection.js';
 
-usersCollection = new Mongo.Collection.get('users');
+
+
+// usersCollection = new Mongo.Collection.get('users');
 // teamsCollection = new Mongo.Collection('teams');
 
 Meteor.methods({
