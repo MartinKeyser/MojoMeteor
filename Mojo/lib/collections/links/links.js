@@ -7,6 +7,9 @@ import { teamBrandLinkCollection } from './linksCollection.js';
 import { teamBrandGroupLinkCollection } from './linksCollection.js';
 
 import { teamsCollection } from '../teams/teamsCollection.js';
+import { brandsCollection } from '../brands/brandsCollection.js';
+// import { brandGroupsCollection } from '../brandGroups/brandGroupsCollection.js';
+import { brandGroupsCollection } from '../brandGroups/brandGroupsCollection.js';
 
 // usersCollection = new Mongo.Collection.get('users');
 // teamsCollection = new Mongo.Collection('teams');
@@ -33,11 +36,11 @@ Meteor.methods({
 
 		var teamRecord = teamsCollection.findOne({ _id: _teamId, isDeleted: false });
 		if (teamRecord == null ) {
-				return {
-					success: false,
-					errorCode: 404,
-					errorMessage: 'Link creation FAILED, No team matching the criteria was found'
-				};
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No team matching the criteria was found'
+			};
 		}
 
 		var newRecord = {
@@ -84,6 +87,25 @@ Meteor.methods({
 				errorMessage: 'This link already exists, cannot recreate it'
 			};
 		}
+
+		var userRecord = Meteor.users.findOne({ _id: _userId, 'profile.isDeleted': false });
+		if (userRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No user matching the criteria was found'
+			};
+		}
+
+		var brandRecord = brandsCollection.findOne({ _id: _brandId, isDeleted: false });
+		if (brandRecord == null ) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brand matching the criteria was found'
+			};
+		}
+
 		var newRecord = {
 			userId: _userId,
 			brandId: _brandId,
@@ -119,8 +141,8 @@ Meteor.methods({
 		}
 	},
 
-	createUserBrandGroupLink:function(_creatorId, _userId, _brandgroupId) {
-		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandgroupId: _brandgroupId });
+	createUserBrandGroupLink:function(_creatorId, _userId, _brandGroupId) {
+		var result = userBrandGroupLinkCollection.findOne({ userId: _userId, brandGroupId: _brandGroupId });
 		if (result != null) {
 			return {
 				success: false,
@@ -128,6 +150,26 @@ Meteor.methods({
 				errorMessage: 'This link already exists, cannot recreate it'
 			};
 		}
+
+		var brandGroupRecord = brandGroupsCollection.findOne(
+			{ _id: _brandGroupId, isDeleted: false });
+		if (brandGroupRecord == null ) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brandGroup matching the criteria was found'
+			};
+		}
+
+		var userRecord = Meteor.users.findOne({ _id: _userId, 'profile.isDeleted': false });
+		if (userRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No user matching the criteria was found'
+			};
+		}
+
 		var newRecord = {
 			userId: _userId,
 			brandgroupId: _brandgroupId,
