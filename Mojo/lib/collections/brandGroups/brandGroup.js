@@ -1,4 +1,4 @@
-brandGroupCollection = new Mongo.Collection('brandGroups');
+import { brandGroupsCollection } from './brandGroupsCollection.js'; 
 
 Meteor.methods({
 	createBrandGroup:function(_userId, _brandGroupName) {
@@ -7,8 +7,8 @@ Meteor.methods({
 			createdDate: new Date().toISOString(),
 			isDeleted: false
 		};
-		var id = brandGroupCollection.insert(newBGRecord);
-		var _rowData = brandGroupCollection.findOne({ _id: id });
+		var id = brandGroupsCollection.insert(newBGRecord);
+		var _rowData = brandGroupsCollection.findOne({ _id: id });
 		Meteor.call('audit', _userId, 'brandGroups', id, _rowData, 'CREATE');
 		return {
 			success: true,
@@ -18,7 +18,7 @@ Meteor.methods({
 	},
 
 	updateBrandGroup:function(_userId, _brandGroupId, _brandGroupName) {
-		var response = brandGroupCollection.update(
+		var response = brandGroupsCollection.update(
 			{ _id: _brandGroupId, isDeleted: false },
 			{ $set: { name: _brandGroupName} }
 		);
@@ -31,7 +31,7 @@ Meteor.methods({
 			};
 		}
 
-		var _rowData = brandGroupCollection.findOne({ _id: _brandGroupId });
+		var _rowData = brandGroupsCollection.findOne({ _id: _brandGroupId });
 		Meteor.call('audit', _userId, 'brandGroups', _brandGroupId, _rowData, 'UPDATE');
 		return {
 			success: true,
@@ -41,7 +41,7 @@ Meteor.methods({
 	},
 
 	deleteBrandGroup:function(_userId, _brandGroupId) {
-		var response = brandGroupCollection.update(
+		var response = brandGroupsCollection.update(
 			{ _id: _brandGroupId, isDeleted: false },
 			{ $set: { isDeleted: true } });
 
@@ -53,7 +53,7 @@ Meteor.methods({
 				};
 			}
 
-		var _rowData = brandGroupCollection.findOne({ _id: _brandGroupId });
+		var _rowData = brandGroupsCollection.findOne({ _id: _brandGroupId });
 		Meteor.call('audit', _userId, 'brandGroups', _brandGroupId, _rowData, 'DELETE');
 		return {
 			success: true,
@@ -67,7 +67,7 @@ Meteor.methods({
 	/* ******************************* */
 	getBrandGroups:function(_userId) {
 		//Return the teams he is linked too.
-		var result = brandGroupCollection.find({ isDeleted: false }).fetch();
+		var result = brandGroupsCollection.find({ isDeleted: false }).fetch();
 		if (result == null) {
 			return {
 				success: false,
@@ -86,7 +86,7 @@ Meteor.methods({
 	},
 
 	getBrandGroupById:function(_userId, _brandGroupId) {
-		var result = brandGroupCollection.findOne({ _id: _brandGroupId, isDeleted: false });
+		var result = brandGroupsCollection.findOne({ _id: _brandGroupId, isDeleted: false });
 		if (result == null) {
 			return {
 				success: false,

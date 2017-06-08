@@ -1,4 +1,4 @@
-brandsCollection = new Mongo.Collection('brands');
+import { brandsCollection } from './brandsCollection.js';
 
 Meteor.methods({
 	createBrand:function(_userId, _name, _facebookId, _twitterId, _instagramId) {
