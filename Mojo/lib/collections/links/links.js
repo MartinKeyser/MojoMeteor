@@ -188,15 +188,6 @@ Meteor.methods({
 			};
 		}
 
-		var userRecord = Meteor.users.findOne({ _id: _userId, 'profile.isDeleted': false });
-		if (userRecord == null) {
-			return {
-				success: false,
-				errorCode: 404,
-				errorMessage: 'Link creation FAILED, No user matching the criteria was found'
-			};
-		}
-
 		var newRecord = {
 			userId: _userId,
 			brandGroupId: _brandGroupId,
@@ -232,6 +223,77 @@ Meteor.methods({
 			};
 		}
 		Meteor.call('audit', _creatorId, 'userBrandGroupLinks', id, null, 'DELETE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	createTeamBrandGroupLink:function(_creatorId, _teamId, _brandGroupId) {
+		var result = teamBrandGroupLinkCollection.findOne({ teamId: _teamId, brandGroupId: _brandGroupId });
+		if (result != null) {
+			return {
+				success: false,
+				errorCode: '205',
+				errorMessage: 'This link already exists, cannot recreate it'
+			};
+		}
+
+		var teamRecord = teamsCollection.findOne({ _id: _teamId, isDeleted: false });
+		if (teamRecord == null) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No team matching the criteria was found'
+			};
+		}
+
+		var brandGroupRecord = brandGroupsCollection.findOne(
+			{ _id: _brandGroupId, isDeleted: false });
+		if (brandGroupRecord == null ) {
+			return {
+				success: false,
+				errorCode: 404,
+				errorMessage: 'Link creation FAILED, No brandGroup matching the criteria was found'
+			};
+		}
+
+		var newRecord = {
+			teamId: _teamId,
+			brandGroupId: _brandGroupId,
+			createdDate: new Date().toISOString()
+		};
+		var id = teamBrandGroupLinkCollection.insert(newRecord);
+		var _rowData = teamBrandGroupLinkCollection.findOne({ _id: id });
+		Meteor.call('audit', _creatorId, 'teamBrandGroupLinks', id, _rowData, 'CREATE');
+		return {
+			success: true,
+			errorCode: '',
+			errorMessage: ''
+		}
+	},
+
+	deleteTeamBrandGroupLink:function(_creatorId, _teamId, _brandgroupId) {
+		// var result = teamBrandGroupLinkCollection.remove
+		var result = teamBrandGroupLinkCollection.findOne({ teamId: _teamId, brandGroupId: _brandgroupId });
+		if (result == null) {
+			return {
+		 		success: false,
+				errorCode: '404',
+				errorMessage: 'This team brandgroup link has already been deleted'
+			};
+		}
+		var id = result._id;
+		var result = teamBrandGroupLinkCollection.remove({ teamId: _teamId, brandGroupId: _brandgroupId });
+		if (result == 0) {
+			return {
+		 		success: false,
+				errorCode: '500',
+				errorMessage: 'No records were successfully deleted'
+			};
+		}
+		Meteor.call('audit', _creatorId, 'teamBrandGroupLinks', id, null, 'DELETE');
 		return {
 			success: true,
 			errorCode: '',

@@ -327,6 +327,35 @@ Template.homeTemplate.events({
 				console.log(result);
 			}
 		});
+	},
+
+    'click #testTeamBrandGroupLinkCreate'(event, instance) {
+		// console.log('team brandgroup create');
+		Meteor.subscribe('links');
+		Meteor.call(
+            'createTeamBrandGroupLink',
+            Meteor.userId(),
+            'g5b3tinCqdFR6bx2L',
+            'EZQyK6DxPGApDt6YA',
+            function(error, result) {
+    			if (error) {
+    				console.log(error);
+    			} else {
+    				console.log(result);
+    			}
+    		});
+	},
+
+	'click #testTeamBrandGroupLinkDelete'(event, instance) {
+		// console.log('team brandgroup create');
+		Meteor.subscribe('links');
+		Meteor.call('deleteTeamBrandGroupLink', Meteor.userId(), 'g5b3tinCqdFR6bx2L', '5stjL25qcmuRQ4WHc', function(error, result) {
+			if (error) {
+				console.log(error);
+			} else {
+				console.log(result);
+			}
+		});
 	}
 
 });
